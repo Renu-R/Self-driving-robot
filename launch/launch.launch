@@ -1,0 +1,3 @@
+<launch>
+  <node name="Mr_mover" pkg="controller_pkg" type="mover.py" output="screen"/>
+</launch>
