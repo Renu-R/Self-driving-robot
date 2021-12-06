@@ -40,8 +40,11 @@ def getreckt(sorted_contours, img):
 
   return ((X,Y))
 
-def get_plate(img):
-  img = img[300:, 0:550]
+def get_plate(img, goin):
+  if goin == False:
+  	img = img[300:, 0:550]
+  else:
+  	img = img[300:, 700:]
   hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
   lower = np.array([120,120,58])
   upper = np.array([255,255,204])
@@ -84,6 +87,7 @@ def get_parking(crop_img):
 
   
   points = cv2.findNonZero(mask)
+  #print(points)
   rect = cv2.minAreaRect(points)
   box = cv2.boxPoints(rect)
 
@@ -166,9 +170,27 @@ def get_chars_pk(img):
   else:
     return None
 
+# def get_all_chars(frame, count):
+# 	plate = get_plate(frame)
+# 	if not np.all(plate == 0):
+# 		cv2.imshow("plate",plate)
+# 		cv2.waitKey(2)
+# 		parking_id, plate_num = get_parking(plate)
 
-def get_all_chars(frame):
-	plate = get_plate(frame)
+# 		chars1 = get_chars_pk(parking_id)
+# 		chars2 = get_chars_pl(plate_num)
+
+# 		if( chars1 != None and chars2 != None):
+# 			for char in chars2:
+
+# 				cv2.imwrite('/home/fizzer/ros_ws/src/controller_pkg/node/letters/A{}.png'.format(count),char)
+# 				count +=1
+# 			return count
+	
+# 	return count
+
+def get_all_chars(frame, goin):
+	plate = get_plate(frame, goin)
 	if not np.all(plate == 0):
 		cv2.imshow("plate",plate)
 		cv2.waitKey(2)
@@ -178,6 +200,7 @@ def get_all_chars(frame):
 		chars2 = get_chars_pl(plate_num)
 
 		if( chars1 != None and chars2 != None):
-			return (chars1[1], chars2)
+			
+			return (chars1, chars2)
 	
-	return (None, None)
+	return None
